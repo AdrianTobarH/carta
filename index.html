@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Celeste</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffebf0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #d6336c;
+            position: absolute;
+            top: 50px;
+        }
+        .card-container {
+            position: relative;
+            cursor: pointer;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            z-index: 2;
+            display: none;
+        }
+        .card.clicked {
+            transform: scale(1.1);
+            background-color: #ffe0e6;
+            display: block;
+        }
+        .envelope {
+            width: 220px;
+            height: 140px;
+            background: linear-gradient(45deg, #ffccd5, #ff4d6d);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            transition: transform 0.3s ease;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="title" id="title">Te tengo un regalo, dale clic a la carta ;)</div>
+    <div class="card-container" onclick="handleClick()">
+        <div class="envelope" id="envelope">📩 Toca para abrir</div>
+        <div class="card" id="card">
+            <div class="heart">❤️</div>
+            <h1>Para: Celeste</h1>
+            <p class="message">Eres muy especial para mí.</p>
+            <p class="valentine">¿Serias mi Valentín, por favor? 💌</p>
+            <p>Con amor, Adrián</p>
+        </div>
+    </div>
+
+    <script>
+        function handleClick() {
+            document.getElementById('card').classList.toggle('clicked');
+            document.getElementById('envelope').classList.add('hidden');
+            document.getElementById('title').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
