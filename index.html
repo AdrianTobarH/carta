@@ -3,90 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Celeste</title>
+    <title>Convertir Web a PDF con Funcionalidad</title>
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #ffebf0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            overflow: hidden;
-            flex-direction: column;
-        }
-        .title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 40px;
-            color: #d6336c;
-            position: absolute;
-            top: 50px;
-        }
-        .card-container {
-            position: relative;
-            cursor: pointer;
-        }
-        .card {
-            background: white;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            line-height: 1.6;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            position: relative;
-            z-index: 2;
-            display: none;
+            min-height: 100vh;
         }
-        .card.clicked {
-            transform: scale(1.1);
-            background-color: #ffe0e6;
-            display: block;
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        .envelope {
-            width: 220px;
-            height: 140px;
-            background: linear-gradient(45deg, #ffccd5, #ff4d6d);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(0deg);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
             color: white;
-            text-transform: uppercase;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: var(--primary-dark);
+            margin: 15px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+        
+        .steps {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .steps li {
+            margin-bottom: 10px;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            padding: 14px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #0d9669;
+        }
+        
+        .warning {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .info-box {
+            background: #dbeafe;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .tool-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
             transition: transform 0.3s ease;
         }
-        .hidden {
-            display: none;
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--dark);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .btn-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="title" id="title">Te tengo un regalo, dale clic a la carta ;)</div>
-    <div class="card-container" onclick="handleClick()">
-        <div class="envelope" id="envelope">📩 Toca para abrir</div>
-        <div class="card" id="card">
-            <div class="heart">❤️</div>
-            <h1>Para: Celeste</h1>
-            <p class="message">Eres muy especial para mí.</p>
-            <p class="valentine">¿Serias mi Valentín, por favor? 💌</p>
-            <p>Con amor, Adrián</p>
-        </div>
-    </div>
+    <div class="container">
+        <header>
+            <h1>Convertir Sitio Web a PDF con Funcionalidad</h1>
+            <p class="subtitle">Mantén la interactividad de tu sitio al convertirlo a PDF</p>
+        </header>
+        
+        <div class="content">
+            <div class="card">
+                <h2>El desafío de los PDFs interactivos</h2>
+                <p>Los PDFs tradicionales no pueden ejecutar código JavaScript ni mantener la funcionalidad interactiva de un sitio web. Para preservar estas características, necesitamos un enfoque diferente.</p>
+                
+                <div class="warning">
+                    <h3>⚠️ Limitación importante</h3>
+                    <p>Es imposible crear un PDF estándar que mantenga toda la funcionalidad JavaScript de un sitio web. Los PDFs son documentos, no aplicaciones web.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Soluciones para preservar la funcionalidad</h2>
+                
+                <h3>Opción 1: Captura interactiva con herramientas especializadas</h3>
+                <p>Algunas herramientas avanzadas pueden capturar el estado actual de una web interactiva:</p>
+                
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h3>Puppeteer</h3>
+                        <p>Biblioteca de Node.js que controla Chrome/Chromium. Puede generar PDFs después de ejecutar JavaScript en la página.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3>Playwright</h3>
+                        <p>Similar a Puppeteer pero con soporte para múltiples navegadores. Excelente para automatización.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3>Services like Urlbox</h3>
+                        <p>Servicios web que capturan sitios web después de que se ejecute el JavaScript.</p>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <a href="https://pptr.dev/" target="_blank" class="btn">
+                        <i>📄</i> Puppeteer
+                    </a>
+                    <a href="https://playwright.dev/" target="_blank" class="btn">
+                        <i>🎭</i> Playwright
+                    </a>
+                    <a href="https://urlbox.io/" target="_blank" class="btn">
+                        <i>🌐</i> Urlbox
+                    </a>
+                </div>
+                
+                <h3>Opción 2: Alternativas para compartir funcionalidad</h3>
+                <p>Si necesitas que otras personas interactúen con tu sitio, considera estas alternativas:</p>
+                
+                <ul class="steps">
+                    <li><strong>Compartir el enlace directamente</strong> - La forma más simple de garantizar funcionalidad completa</li>
+                    <li><strong>Crear un video demostrativo</strong> - Muestra la interactividad en acción</li>
+                    <li><strong>Usar herramientas de captura de pantalla interactivas</strong> - Como Screenity o Loom</li>
+                </ul>
+                
+                <div class="btn-container">
+                    <a href="https://calm-starburst-2aa6fd.netlify.app/" target="_blank" class="btn btn-secondary">
+                        <i>🔗</i> Abrir sitio web original
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Guía paso a paso: Conversión con Puppeteer</h2>
+                
+                <div class="info-box">
+                    <p>Esta opción requiere conocimientos técnicos y acceso a Node.js.</p>
+                </div>
+                
+                <h3>Paso 1: Instalar Node.js y Puppeteer</h3>
+                <p>Descarga Node.js desde el sitio oficial y luego instala Puppeteer con npm.</p>
+                
+                <h3>Paso 2: Crear script de conversión</h3>
+                <p>Crea un archivo JavaScript con el siguiente código:</p>
+                
+                <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; overflow: auto; margin: 15px 0;">
+const puppeteer = require('puppeteer');
 
+(async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  
+  // Esperar a que toda la carga y ejecución de JavaScript se complete
+  await page.goto('https://calm-starburst-2aa6fd.netlify.app/', {
+    waitUntil: 'networkidle0'
+  });
+  
+  // Esperar adicionalmente si es necesario para animaciones o carga dinámica
+  await page.waitForTimeout(5000);
+  
+  // Generar PDF
+  await page.pdf({
+    path: 'webpage.pdf',
+    format: 'A4',
+    printBackground: true
+  });
+
+  await browser.close();
+})();</pre>
+                
+                <h3>Paso 3: Ejecutar el script</h3>
+                <p>Ejecuta el script con Node.js para generar el PDF.</p>
+                
+                <div class="btn-container">
+                    <a href="https://nodejs.org/" target="_blank" class="btn">
+                        <i>📦</i> Descargar Node.js
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Servicios en línea alternativos</h2>
+                <p>Si no quieres instalar software, estos servicios pueden ayudarte:</p>
+                
+                <ul class="steps">
+                    <li><strong>WebCapture</strong> - Permite configurar retrasos para esperar a que se ejecute el JavaScript</li>
+                    <li><strong>APIs like Html2pdf</strong> - Ofrecen endpoints para conversión de páginas web a PDF</li>
+                </ul>
+                
+                <div class="btn-container">
+                    <a href="https://webcapture.io/" target="_blank" class="btn">
+                        <i>📷</i> WebCapture
+                    </a>
+                    <a href="https://html2pdf.com/" target="_blank" class="btn">
+                        <i>⚡</i> Html2pdf API
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 - Solución para conversión de sitios web a PDF con funcionalidad</p>
+        </footer>
+    </div>
+    
     <script>
-        function handleClick() {
-            document.getElementById('card').classList.toggle('clicked');
-            document.getElementById('envelope').classList.add('hidden');
-            document.getElementById('title').classList.add('hidden');
-        }
+        // Animación para los botones
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Efecto de pulsación
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // Simular descarga de PDF (solo demostración)
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoBtn = document.createElement('button');
+            demoBtn.textContent = 'Descargar PDF de demostración';
+            demoBtn.className = 'btn';
+            demoBtn.style.margin = '20px auto';
+            demoBtn.style.display = 'block';
+            
+            demoBtn.addEventListener('click', function() {
+                alert('En una implementación real, esto descargaría el PDF. Para una conversión real con funcionalidad, sigue las instrucciones anteriores.');
+            });
+            
+            document.querySelector('.content').appendChild(demoBtn);
+        });
     </script>
 </body>
 </html>
